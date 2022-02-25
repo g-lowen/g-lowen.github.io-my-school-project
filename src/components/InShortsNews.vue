@@ -8,7 +8,7 @@
         .then((result) => {
           this.news = result.data.data
           this.news = this.news.slice(0, this.amountOfNews)
-          console.log(this.news)
+          // console.log(this.news)
         })
     },
     data() {
@@ -27,7 +27,7 @@
       amountOfNews: {
         type: Number,
         default() {
-          return 5
+          return 2
         }
       }
     }
@@ -35,7 +35,6 @@
 </script>
 
 <template>
-  {{ test }}
   <ol>
     <li
       :key="newsStory"

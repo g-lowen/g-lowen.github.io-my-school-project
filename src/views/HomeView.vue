@@ -4,7 +4,7 @@
     data() {
       return {
         newsCategory: '',
-        news: '',
+        news: [],
         categories: [
           'all',
           'national',
@@ -19,7 +19,14 @@
           'hatke',
           'science',
           'automobile'
-        ]
+        ],
+        searchValue: '',
+        searchedNews: []
+      }
+    },
+    computed: {
+      searchedValue() {
+        return this.searchedNews.length
       }
     },
     methods: {
@@ -34,9 +41,19 @@
         })
       },
       readMore() {
-        this.$emit('news-clicked')
-
-        // alert(`*Länk till hemsidan*)
+        // this.$emit('news-clicked')
+        alert('*Länk till hemsidan*')
+      }
+    },
+    watch: {
+      searchValue() {
+        const searchedString = this.news.filter((x) => {
+          return x.title.toLowerCase().includes(this.searchValue.toLowerCase())
+        })
+        this.searchedNews = []
+        for (let i = 0; i < searchedString.length; i++) {
+          this.searchedNews.push(searchedString[i])
+        }
       }
     }
   }
@@ -45,19 +62,6 @@
 <template>
   <h1>News categories</h1>
   <p>Select or type what category you're interested in</p>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm">
-        <ul class="hide-bullet wide-screen">
-          <li><router-link to="/NewsStory">Science</router-link></li>
-          <li :key="category" v-for="category in categories">
-            <input type="radio" v-model="newsCategory" :value="category" />
-            <label :value="category">{{ category }}</label>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
 
   <input v-model="newsCategory" />
   <input
@@ -68,21 +72,61 @@
     placeholder="test"
     :value="'Show ' + this.newsCategory + ' news'"
   />
-  <ol class="hide-bullet">
-    <li :key="newsStory" v-for="newsStory in news">
-      <h2>{{ newsStory.title }}</h2>
-      <p>{{ newsStory.content }}</p>
-      <img :src="newsStory.imageUrl" alt="News image" height="200" />
-      <p>
-        <input
-          type="button"
-          @click="readMore"
-          value="Read more"
-          class="btn btn-primary"
-        />
-      </p>
-    </li>
-  </ol>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <ul class="hide-bullet wide-screen">
+          <li :key="category" v-for="category in categories">
+            <input type="radio" v-model="newsCategory" :value="category" />
+            <label :value="category">{{ category }}</label>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="searchBar" v-if="this.news.length !== 0">
+    <input type="text" placeholder="Search title" v-model="searchValue" />
+    <div v-if="searchedNews.length !== 0">
+      <div>Showing {{ searchedValue }} news</div>
+    </div>
+    <div v-else>Showing 10 news</div>
+  </div>
+  <div v-if="searchedNews.length !== 0">
+    <ol class="hide-bullet">
+      <li :key="newsStory" v-for="newsStory in searchedNews">
+        <h2>{{ newsStory.title }}</h2>
+        <p>{{ newsStory.content }}</p>
+        <img :src="newsStory.imageUrl" alt="News image" height="200" />
+        <p>
+          <input
+            type="button"
+            @click="readMore"
+            value="Read more"
+            class="btn btn-primary"
+          />
+        </p>
+      </li>
+    </ol>
+  </div>
+  <div v-else>
+    <ol class="hide-bullet">
+      <li :key="newsStory" v-for="newsStory in news">
+        <h2>{{ newsStory.title }}</h2>
+        <p>{{ newsStory.content }}</p>
+        <img :src="newsStory.imageUrl" alt="News image" height="200" />
+        <p>
+          <input
+            type="button"
+            @click="readMore"
+            value="Read more"
+            class="btn btn-primary"
+          />
+        </p>
+      </li>
+    </ol>
+  </div>
+  <p><router-link to="/NewsStory">News story page</router-link></p>
 </template>
 
 <style>

@@ -9,6 +9,6 @@
 </script>
 
 <template class="black">
-  <p><InShortsNews /></p>
+  <p><InShortsNews :amount-of-news="5" /></p>
   <p>{{ $route.params.content }}</p>
 </template>

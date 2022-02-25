@@ -1,17 +1,12 @@
 <template>
   <input
-    :disabled="$store.state.counter === 1"
+    :disabled="$store.state.counter === 1 || $store.state.counter === 0"
     @click="$store.commit('decrease')"
     type="button"
     value="-"
     class="btn btn-warning"
   />
-  <input
-    type="button"
-    :value="$store.state.counter"
-    @click="$store.commit('increment')"
-    class="btn btn-primary"
-  />
+  <input type="button" :value="$store.state.counter" class="btn btn-primary" />
   <input
     type="button"
     value="+"

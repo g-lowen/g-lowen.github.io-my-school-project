@@ -34,7 +34,7 @@
         })
       },
       readMore() {
-        this.$emit('news-clicked')
+        // this.$emit('news-clicked')
         alert('*Länk till hemsidan*')
       },
       testClick() {
